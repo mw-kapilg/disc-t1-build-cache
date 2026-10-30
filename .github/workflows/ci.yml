@@ -17,6 +17,16 @@ jobs:
         with:
           release: latest
 
+      # Persist the build tool's incremental state so up-to-date tasks are
+      # skipped. Each run saves a fresh entry; restore-keys picks the latest.
+      - name: Cache MATLAB build state
+        uses: actions/cache@v5
+        with:
+          path: .buildtool
+          key: buildtool-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            buildtool-${{ runner.os }}-
+
       - name: Run MATLAB build
         uses: matlab-actions/run-build@v3
         with:
